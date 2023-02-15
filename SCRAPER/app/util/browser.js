@@ -7,8 +7,14 @@ module.exports= class Browser {
     }
     async init(){
         this.browser = await puppeteer.launch({
+            args: [
+                "--disable-gpu",
+                "--disable-dev-shm-usage",
+                "--disable-setuid-sandbox",
+                "--no-sandbox",
+            ],
             slowMo:300,
-            headless:false,  
+            headless:true,  
         })
         this.page = await this.browser.newPage()
         await this.page.goto(this.URL)

@@ -31,6 +31,15 @@ services:
     networks:
       - backend
 
+  scraper:
+    depends_on:
+      - backend
+    networks:
+      - backend
+    build: ./SCRAPER
+    volumes:
+      - $PWD/SCRAPER/app:/usr/src/scraper/app
+
 networks:
   backend:
     driver: bridge
