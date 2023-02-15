@@ -14,4 +14,5 @@ module.exports =  class Pokemon{
             console.log('errror ', error)
         }
     }
+    // static async save
 }

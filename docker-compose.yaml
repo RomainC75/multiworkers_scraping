@@ -9,6 +9,7 @@ services:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'user_pass'
       MYSQL_ROOT_PASSWORD: 'root_pass'
+      MYSQL_ROOT_HOST: '%'
     ports:
       - '3306:3306'
     expose:
@@ -16,6 +17,25 @@ services:
     volumes:
       - $PWD/database:/var/lib/mysql
       # - my-db:/var/lib/mysql
+    networks:
+      - backend
+
+  backend:
+    depends_on:
+      - db
+    build: ./BACK
+    ports:
+      - "5000:5000"
+    volumes:
+      - $PWD/BACK/app:/usr/src/server/app
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+
 # Names our volume
 # volumes:
 #   my-db:

@@ -1,7 +1,9 @@
 BACK/node_modules
 BACK/.env
-FRONT/node_modules
+./FRONT/node_modules
+FROM/node_modules
 FRONT/.env
 SCRAPER/node_modules
 SCRAPER/.env
 DATABASE
+database

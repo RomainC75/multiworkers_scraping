@@ -4,7 +4,8 @@ require('dotenv').config()
 
 // Create the connection pool. The pool-specific settings are the defaults
 const pool = mysql.createPool({
-  host: 'localhost',
+  // host: 'localhost',
+  host: 'db',
   user: process.env.DB_USERNAME,
   database: 'scrape',
   waitForConnections: true,
