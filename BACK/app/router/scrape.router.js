@@ -9,7 +9,9 @@ router.post('/', async (req,res,next)=>{
         const {name, url, price} = req.body
         const ans = await Pokemon.saveUrl(name, url, price)
         console.log("ans : ",ans)
-        
+        res.status(201).json({
+            message : 'pokemon registered'
+        })
     } catch (error) {
         console.log('error : ', error)
         next(error)

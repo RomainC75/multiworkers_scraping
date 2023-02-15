@@ -1,11 +1,6 @@
 
-BACK/.env
-
-
-FRONT/.env
-
-SCRAPER/.env
 DATABASE
 database
 
 **/node_modules
+**/.env
