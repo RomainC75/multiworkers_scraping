@@ -1,7 +1,7 @@
 const axios = require('axios')
 require('dotenv').config()
-// const url = "http://localhost:5000/scrape"
-const url = "http://backend"
+const url = "http://localhost:5000"
+// const url = "http://backend:5000"
 
 module.exports= class API{
     constructor(){
@@ -10,11 +10,11 @@ module.exports= class API{
     static async postNewLink(pokemon){
         return new Promise(async(resolve, reject)=>{
             try {
-                const fullAddress = `${url}:5000/scrape`
+                const fullAddress = `${url}/scrape`
                 console.log("==> full address : ", fullAddress)
-                const ans = await axios.post(fullAddress,pokemon)
-                console.log('--sraper-- ans : ', ans)
-                resolve(ans)
+                const {data} = await axios.post(fullAddress,pokemon)
+                console.log('--sraper-- data : ', data)
+                resolve(data)
             } catch (error) {
                 reject(error)
             }
