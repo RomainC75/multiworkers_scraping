@@ -31,6 +31,25 @@ services:
     networks:
       - backend
 
+  backend_test:
+    depends_on:
+      - backend
+    build: ./BACK
+    volumes:
+      - $PWD/BACK/app:/usr/src/server/app
+    command: npm run test
+    networks:
+      - backend
+    logging:
+      driver: journald
+      options:
+        tag: tests
+    # environment:
+    #   DEBUG_COLORS: "true"
+    #   TERM: xterm-256color
+    #   COLORTERM: truecolor
+    #   FORCE_COLOR: "true"
+
   # scraper:
   #   depends_on:
   #     - backend
@@ -39,6 +58,8 @@ services:
   #   build: ./SCRAPER
   #   volumes:
   #     - $PWD/MAIN_SCRAPER/app:/usr/src/scraper/app
+
+    
 
 networks:
   backend:

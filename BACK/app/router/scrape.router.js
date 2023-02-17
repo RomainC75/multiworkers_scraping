@@ -1,5 +1,14 @@
 const router = require('express').Router()
 const Pokemon = require('../models/pokemon.model')
+const createError = require('http-errors')
+
+router.get('/', async(req,res,next)=>{
+    try {
+        
+    } catch (error) {
+        next(createError(404,'not found'))
+    }
+})
 
 router.post('/', async (req,res,next)=>{
     try {

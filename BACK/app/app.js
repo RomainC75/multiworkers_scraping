@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const { handle404 } = require('./controllers/errors');
 
+require('./db/db')
 require('./db/init')()
+
 require('dotenv').config()
 
 const app = express();
@@ -23,4 +25,4 @@ app.use('/hello',require('./router/hello.router'))
 
 app.use(handle404);
 
-app.listen(5000);
+module.exports = app
