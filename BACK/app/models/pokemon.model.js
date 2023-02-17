@@ -1,9 +1,17 @@
-const mysql = require('mysql2')
 const db=require('../db/db')
 
 module.exports =  class Pokemon{
     constructor(){
 
+    }
+    static async getPokemons(){
+        try {
+            return await db.query(
+                "SELECT * FROM pokemon"
+            )
+        } catch (error) {
+            console.log('==>',error)
+        }
     }
     static async saveUrl(name, url, price){
         try {
@@ -11,7 +19,7 @@ module.exports =  class Pokemon{
                 "INSERT INTO `pokemon` (`name`, `url`, `price`) VALUES  ( ? , ? , ? )",
             [name, url, price])
         } catch (error) {
-            console.log('errror ', error)
+            return null
         }
     }
     static async getPokemonByUrl(url){
