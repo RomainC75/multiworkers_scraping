@@ -35,10 +35,20 @@ module.exports =  class Pokemon{
     static async getPokemonByUrl(url){
         try {
             return await db.query(
-                " SELECT * FROM pokemon WHERE url = ? ",
+                " SELECT * FROM pokemon WHERE url = '?' ",
             [url])
         } catch (error) {
             console.log('==>getPokemonByUrl -- error', error)
+        }
+    }
+
+    static async getPokemonByName(name){
+        try {
+            return await db.query(
+                " SELECT * FROM pokemon WHERE name = ? ",
+            [name])
+        } catch (error) {
+            console.log('==>getPokemonByName -- error', error)
         }
     }
 
@@ -85,7 +95,7 @@ module.exports =  class Pokemon{
                 " UPDATE pokemon SET `description`= ? , `stock`= ? , isAnalysed = 1 WHERE `id` = ? ",
                 [data.description, data.stock, id]
             )
-            return ans
+            return foundPokemon
         }catch(error){
             console.log('==>updateDescriptionAndStockWithId error', error)
         }
