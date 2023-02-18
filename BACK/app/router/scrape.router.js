@@ -14,12 +14,13 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
+    console.log('????/SCRAPE POST ')
   try {
     if (
       !("name" in req.body) ||
       !("url" in req.body || !("price" in req.body))
     ) {
-      res.status(400).json({ message: "need 3 keys : name, url ans price" });
+      return res.status(400).json({ message: "need 3 keys : name, url ans price" });
     }
     const { name, url, price } = req.body;
     const ans = await Pokemon.saveUrl(name, url, price);
@@ -74,8 +75,16 @@ router.get("/url", async (req, res, next) => {
   try {
     const { pokemonUrl } = req.body;
     const [foundPokemon] = await Pokemon.getPokemonByUrl(pokemonUrl);
-    console.log("==>", foundPokemon);
   } catch (error) {}
 });
+
+router.delete('/:name', async (req,res, next)=>{
+    try {
+        const ans = await Pokemon.deletePokemonByName(req.params.name)
+        res.status(200).json({message : "pokemon deleted"})
+    } catch (error) {
+        
+    }
+})
 
 module.exports = router;

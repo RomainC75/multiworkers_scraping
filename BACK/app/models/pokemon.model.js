@@ -13,6 +13,16 @@ module.exports =  class Pokemon{
             console.log('==>',error)
         }
     }
+    static async deletePokemonByName(name){
+        try {
+            return await db.query(
+                "DELETE FROM `pokemon` WHERE `name` = ? ",
+                [name]
+            )
+        } catch (error) {
+            console.log('==>',error)
+        }
+    }
     static async saveUrl(name, url, price){
         try {
             return await db.query(
