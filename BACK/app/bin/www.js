@@ -7,6 +7,10 @@
 var app = require('../app');
 var debug = require('debug')('mocha-chai:server');
 var http = require('http');
+const chat = require('../controllers/socket');
+
+
+
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +25,19 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+
+const io = require('socket.io')(server, {
+  //same path as the client
+  path: '/socket.io',
+  cors: {
+     origin: [process.env.DOMAIN],
+     methods: ['GET', 'POST'],
+  //    allowedHeaders: ['content-type']
+      credentials: false
+  },
+})
+
+chat(io)
 /**
  * Listen on provided port, on all network interfaces.
  */

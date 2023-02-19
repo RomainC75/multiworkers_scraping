@@ -18,7 +18,7 @@ services:
       - $PWD/database:/var/lib/mysql
       # - my-db:/var/lib/mysql
     networks:
-      - backend
+      - backend_network
 
   backend:
     depends_on:
@@ -29,40 +29,72 @@ services:
     volumes:
       - $PWD/BACK/app:/usr/src/server/app
     networks:
-      - backend
+      - backend_network
+      # - frontend_network
+    environment:
+      - DOMAIN=http://localhost:3000
 
-  backend_test:
-    depends_on:
-      - backend
-    build: ./BACK
-    volumes:
-      - $PWD/BACK/app:/usr/src/server/app
-    command: npm run test
-    networks:
-      - backend
-    logging:
-      driver: journald
-      options:
-        tag: tests
-    # environment:
-    #   DEBUG_COLORS: "true"
-    #   TERM: xterm-256color
-    #   COLORTERM: truecolor
-    #   FORCE_COLOR: "true"
+  # backend_test:
+  #   depends_on:
+  #     - backend
+  #   build: ./BACK
+  #   volumes:
+  #     - $PWD/BACK/app:/usr/src/server/app
+  #   command: npm run test
+  #   networks:
+  #     - backend_network
+  #   logging:
+  #     driver: journald
+  #     options:
+  #       tag: tests
 
   # scraper:
   #   depends_on:
   #     - backend
   #   networks:
-  #     - backend
-  #   build: ./SCRAPER
+  #     - backend_network
+  #   build: ./MAIN_SCRAPER
   #   volumes:
   #     - $PWD/MAIN_SCRAPER/app:/usr/src/scraper/app
 
-    
+  # worker:
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - backend_network
+  #   build: ./WORKER
+  #   volumes:
+  #     - $PWD/WORKER/app:/usr/src/scraper/app
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 5
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 512M
+  #       reservations:
+  #         cpus: '0.5'
+  #         memory: 256M
 
+  frontend:
+    depends_on:
+      - backend
+    networks:
+      # - frontend_network
+      - backend_network
+    build: ./front
+    volumes:
+      - $PWD/front/src:/app/src
+    ports:
+      - "3000:3000"
+    environment:
+      # - REACT_APP_SOCKET=http://backend:5000
+      - REACT_APP_SOCKET=http://localhost:5000
+    
 networks:
-  backend:
+  backend_network:
+    driver: bridge
+  frontend_network:
     driver: bridge
 
 

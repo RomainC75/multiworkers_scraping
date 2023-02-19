@@ -1,7 +1,7 @@
 const axios = require('axios')
 require('dotenv').config()
-const url = "http://localhost:5000"
-// const url = "http://backend:5000"
+// const url = "http://localhost:5000"
+const url = "http://backend:5000"
 
 module.exports= class API{
     constructor(){
