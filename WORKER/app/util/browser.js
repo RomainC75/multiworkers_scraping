@@ -13,7 +13,7 @@ module.exports = class Browser {
           "--disable-setuid-sandbox",
           "--no-sandbox",
       ],
-      slowMo: 300,
+      slowMo: 1000,
       headless:true,
       // headless: false,
     });
@@ -24,7 +24,6 @@ module.exports = class Browser {
     try {
       await this.api.getNextPokemon();
       const urlToScrape = this.api.getUrlToScrape();
-      console.log("url to scrape : ", urlToScrape);
       await this.page.goto(urlToScrape);
       const data = await this.page.evaluate(() => {
         const description = document
@@ -37,7 +36,6 @@ module.exports = class Browser {
           stock,
         };
       });
-      console.log("GOG ! ", data);
       await this.api.postDetails(data.description, data.stock);
     } catch (error) {
         

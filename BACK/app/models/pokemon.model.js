@@ -68,7 +68,9 @@ module.exports =  class Pokemon{
             const [[foundPokemon]] = await db.query(
                 " SELECT * FROM pokemon WHERE isAnalysed = 0 AND isWaiting = 0 LIMIT 1"
             )
-            
+            if(!foundPokemon || !('id' in foundPokemon)){
+                return null
+            }
             const pokemonId = foundPokemon.id
             const ans = await db.query(
                 " UPDATE `pokemon` SET `isWaiting` = 1 WHERE `id` = '?';  ",
@@ -98,6 +100,28 @@ module.exports =  class Pokemon{
             return foundPokemon
         }catch(error){
             console.log('==>updateDescriptionAndStockWithId error', error)
+        }
+    }
+
+    static async getEveryPokemonEntriesCount(){
+        try{
+            const [[res]] = await db.query(
+                "SELECT COUNT(*) FROM pokemon"
+            )
+            return res['COUNT(*)']
+        }catch(error){
+            console.log('==> getPokemonEntriesCount ERROR :', error)
+        }
+    }
+
+    static async getPokemonHalfEntriesCount(){
+        try {
+            const [[res]] = await db.query(
+                "SELECT COUNT(*) FROM pokemon WHERE `description` IS NULL"
+            )
+            return res['COUNT(*)']
+        } catch (error) {
+            console.log('==> getPokemonHalfEntriesCount', error )
         }
     }
 

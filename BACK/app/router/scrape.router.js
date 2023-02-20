@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Pokemon = require("../models/pokemon.model");
 const createError = require("http-errors");
-const { create } = require("domain");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -14,7 +13,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  console.log("????/SCRAPE POST ");
   try {
     if (
       !("name" in req.body) ||
@@ -34,6 +32,13 @@ router.post("/", async (req, res, next) => {
       message: "pokemon registered",
       insertedId: ans[0].insertId,
     });
+    
+    const fullCount = await Pokemon.getEveryPokemonEntriesCount();
+    global.io.emit("news", { 
+      hello: "news from the pokemon scraping field",
+      fullCount 
+     });
+
   } catch (error) {
     console.log("error : ", error);
     next(error);
@@ -43,7 +48,12 @@ router.post("/", async (req, res, next) => {
 router.get("/next", async (req, res, next) => {
   try {
     const firstPokemonFound = await Pokemon.getFirstWaitingPokemon();
+    const everyPokemonCount = await Pokemon.getEveryPokemonEntriesCount()
+    
     if (!firstPokemonFound) {
+      if(everyPokemonCount<20){
+        return res.status(425).json({ message: "too early" });
+      }
       return res.status(400).json({ message: "no pokemon to analyse" });
     }
     // console.log('==> FIrst pokemon found : ', firstPokemonFound)
@@ -66,9 +76,11 @@ router.post("/next/:id", async (req, res, next) => {
     );
     console.log("==> preUpdatedPokemon", preUpdatedPokemon);
     if (!preUpdatedPokemon) {
-      return res.status(422).json({ message: "oups, something wrong in the request" });
+      return res
+        .status(422)
+        .json({ message: "oups, something wrong in the request" });
     }
-    res.status(201).json({ message: "updated",preUpdatedPokemon });
+    res.status(201).json({ message: "updated", preUpdatedPokemon });
   } catch (error) {
     next(error);
   }
