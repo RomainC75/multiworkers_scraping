@@ -34,17 +34,20 @@ module.exports= class Browser {
             })
         })
         console.log('---scraper--- DATA on page: ', data)
-        await Promise.all(data.map((pokemon)=>{
-            return new Promise(async(resolve,reject)=>{
-                try {
-                    const ans = await Api.postNewLink(pokemon)
-                    console.log('=================>')
-                    resolve(ans)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        }))
+        
+        // await Promise.all(data.map((pokemon)=>{
+        //     return new Promise(async(resolve,reject)=>{
+        //         try {
+        //             const ans = await Api.postNewLink(pokemon)
+        //             console.log('=================>')
+        //             resolve(ans)
+        //         } catch (error) {
+        //             reject(error)
+        //         }
+        //     })
+        // }))
+        const ans = await Api.postNewLinks(data)
+
         try {
             await this.page.waitForSelector('.next')
             await this.page.click('.next')

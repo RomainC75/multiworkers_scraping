@@ -14,31 +14,42 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    if (
-      !("name" in req.body) ||
-      !("url" in req.body || !("price" in req.body))
-    ) {
-      return res
-        .status(400)
-        .json({ message: "need 3 keys : name, url ans price" });
-    }
-    const { name, url, price } = req.body;
-    const ans = await Pokemon.saveUrl(name, url, price);
-    if (!ans) {
-      return next(createError(400, "bad request. name is UNIQUE !!"));
-    }
-    console.log("======>post ans : ", ans);
+    // if (
+    //   !("name" in req.body) ||
+    //   !("url" in req.body || !("price" in req.body))
+    // ) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "need 3 keys : name, url ans price" });
+    // }
+    
+    const ans = await Promise.all(
+      req.body.map( (pokemon) => {
+        return new Promise(async(resolve,reject)=>{
+          try {
+            const { name, url, price } = pokemon;
+            const ans = await Pokemon.saveUrl(name, url, price);
+            if (!ans) {
+              resolve({error: name})
+            }
+            resolve(ans[0].insertId)
+          } catch (error) {
+            reject(error);
+          }
+        })
+      })
+    );
+
     res.status(201).json({
       message: "pokemon registered",
-      insertedId: ans[0].insertId,
+      insertedIds:   ans ,
     });
-    
-    const fullCount = await Pokemon.getEveryPokemonEntriesCount();
-    global.io.emit("news", { 
-      hello: "news from the pokemon scraping field",
-      fullCount 
-     });
 
+    const fullCount = await Pokemon.getEveryPokemonEntriesCount();
+    global.io.emit("news", {
+      hello: "news from the pokemon scraping field",
+      fullCount,
+    });
   } catch (error) {
     console.log("error : ", error);
     next(error);
@@ -48,10 +59,10 @@ router.post("/", async (req, res, next) => {
 router.get("/next", async (req, res, next) => {
   try {
     const firstPokemonFound = await Pokemon.getFirstWaitingPokemon();
-    const everyPokemonCount = await Pokemon.getEveryPokemonEntriesCount()
-    
+    const everyPokemonCount = await Pokemon.getEveryPokemonEntriesCount();
+
     if (!firstPokemonFound) {
-      if(everyPokemonCount<20){
+      if (everyPokemonCount < 20) {
         return res.status(425).json({ message: "too early" });
       }
       return res.status(400).json({ message: "no pokemon to analyse" });
