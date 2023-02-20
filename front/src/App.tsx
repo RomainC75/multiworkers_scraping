@@ -24,6 +24,15 @@ function App() {
     };
   }, []);
 
+  useEffect(()=>{
+    socket.on("news",message=>{
+      console.log('news : ', message)
+    })
+  },[socket])
+
+
+
+
   return <div className="App">{process.env.REACT_APP_SOCKET}</div>;
 }
 
