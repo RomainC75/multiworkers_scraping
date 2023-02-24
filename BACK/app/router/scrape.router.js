@@ -49,7 +49,9 @@ router.post("/", async (req, res, next) => {
     global.io.emit("news", {
       hello: "news from the pokemon scraping field",
       fullCount,
+      date: new Date()
     });
+    
   } catch (error) {
     console.log("error : ", error);
     next(error);
@@ -78,8 +80,6 @@ router.post("/next/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    console.log("==>ID : ", id);
-    console.log("==>DATA : ", data);
     const pokemon = new Pokemon();
     const preUpdatedPokemon = await pokemon.updateDescriptionAndStockWithId(
       id,

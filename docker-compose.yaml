@@ -34,47 +34,47 @@ services:
     environment:
       - DOMAIN=http://localhost:3000
 
-  # backend_test:
+  backend_test:
+    depends_on:
+      - backend
+    build: ./BACK
+    volumes:
+      - $PWD/BACK/app:/usr/src/server/app
+    command: npm run test
+    networks:
+      - backend_network
+    logging:
+      driver: journald
+      options:
+        tag: tests
+
+  # scraper:
   #   depends_on:
   #     - backend
-  #   build: ./BACK
-  #   volumes:
-  #     - $PWD/BACK/app:/usr/src/server/app
-  #   command: npm run test
   #   networks:
   #     - backend_network
-  #   logging:
-  #     driver: journald
-  #     options:
-  #       tag: tests
+  #   build: ./MAIN_SCRAPER
+  #   volumes:
+  #     - $PWD/MAIN_SCRAPER/app:/usr/src/scraper/app
 
-  scraper:
-    depends_on:
-      - backend
-    networks:
-      - backend_network
-    build: ./MAIN_SCRAPER
-    volumes:
-      - $PWD/MAIN_SCRAPER/app:/usr/src/scraper/app
-
-  worker:
-    depends_on:
-      - backend
-    networks:
-      - backend_network
-    build: ./WORKER
-    volumes:
-      - $PWD/WORKER/app:/usr/src/scraper/app
-    deploy:
-      mode: replicated
-      replicas: 3
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
-        reservations:
-          cpus: '0.5'
-          memory: 256M
+  # worker:
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - backend_network
+  #   build: ./WORKER
+  #   volumes:
+  #     - $PWD/WORKER/app:/usr/src/scraper/app
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 3
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 512M
+  #       reservations:
+  #         cpus: '0.5'
+  #         memory: 256M
 
   frontend:
     depends_on:
