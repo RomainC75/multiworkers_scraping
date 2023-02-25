@@ -31,15 +31,16 @@ function MyChart({ chartData }:MyChartInterface) {
     <div className="chart-container">
       <h2 style={{ textAlign: "center" }}>Line Chart</h2>
       <Line
-        data={chartData}
-        options={{
+        data = {chartData}
+        options = {{
           plugins: {
             title: {
               display: true,
-              text: "Users Gained between 2016-2020"
+              text: "Evolution of the scraping process"
             },
             legend: {
-              display: false
+              display: true,
+              position: 'top'
             }
           }
         }}

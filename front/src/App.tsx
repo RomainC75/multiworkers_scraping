@@ -9,30 +9,25 @@ import { ChartDataInterface, DatasetInterface } from "./@types/data";
 import { scrapingInfoData } from "./@types/socket";
 
 const data:ChartDataInterface = {
-  labels: ["Red", "Orange", "Blue"],
-  // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+  labels: ["13:22:08", "13:25:08", "13:32:18"],
   datasets: [
     {
-      label: "Total",
-      data: [55, 23, 96],
-      // you can set indiviual colors for each bar
+      label: "FullCount",
+      data: [55, 75, 96],
       backgroundColor: [
-        "blue",
-        // "rgba(255, 255, 255, 0.6)",
-        // "rgba(255, 255, 255, 0.6)",
+        "red",       
       ],
       borderWidth: 1,
+      borderColor: 'rgba(230,0,0,0.5)'
     },
     {
-      label: "FullCount",
-      data: [55, 23, 96],
-      // you can set indiviual colors for each bar
+      label: "HalfCount",
+      data: [5, 23, 50],
       backgroundColor: [
-        "blue",
-        "rgba(255, 255, 255, 0.6)",
-        "rgba(255, 255, 255, 0.6)",
+        "blue"
       ],
       borderWidth: 1,
+      borderColor: 'rgba(0,0,230,0.5)'
     },
   ],
 };

@@ -8,6 +8,8 @@ export const updateChartData = (
 ): ChartDataInterface => {
 
   const dateObj = new Date(date);
+    fullCount=fullCount ? fullCount : chartData.datasets[0].data[chartData.datasets[0].data.length-1]
+    halfCount = halfCount ? halfCount : chartData.datasets[1].data[chartData.datasets[0].data.length-1]
 
   if (chartData.labels.length >= 10) {
     chartData.labels.shift();
@@ -15,10 +17,10 @@ export const updateChartData = (
   }
 
   chartData.labels.push(
-    `${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`
+    `${dateObj.getHours()}:${dateObj.getMinutes().toString().padStart(2,'0')}:${dateObj.getSeconds().toString().padStart(2,'0')}`
   );
 
-  chartData.datasets[0].data.push(fullCount);
+  fullCount && chartData.datasets[0].data.push(fullCount);
 
   return chartData;
 };

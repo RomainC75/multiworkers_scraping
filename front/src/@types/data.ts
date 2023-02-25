@@ -7,5 +7,6 @@ export interface DatasetInterface{
     label:string,
     data:number[],
     backgroundColor:string[],
-    borderWidth: number
+    borderWidth: number,
+    borderColor: string
 }
