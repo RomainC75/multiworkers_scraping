@@ -46,8 +46,7 @@ router.post("/", async (req, res, next) => {
     });
 
     const fullCount = await Pokemon.getEveryPokemonEntriesCount();
-    global.io.emit("news", {
-      hello: "news from the pokemon scraping field",
+    global.io.emit("scrapingInfo", {
       fullCount,
       date: new Date()
     });
