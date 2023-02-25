@@ -26,7 +26,8 @@ To do this, I focused on some technical things:
 - Dockerfile and Docker-compose.yaml files to build containers and orchestrate the run :smile::smile::smile:,
 - I wrote a personnal ORM to handle the SQL requests with mysql2,
 - Socket.io to send informations about the results to the frontend,
-- Chart.js to display the results
+- Chart.js to display the results,
+- Tests with Jest and supertest
 
 There is nothing special about the interface, because it's supposed to run on a personnal computer/server. But the next iteration might be a bigger app :wink:
 
@@ -36,6 +37,7 @@ There is nothing special about the interface, because it's supposed to run on a 
 - ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 - ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 - ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+- ![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
 - ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 - ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
 - ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
