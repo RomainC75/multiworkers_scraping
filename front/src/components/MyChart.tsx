@@ -29,7 +29,6 @@ interface MyChartInterface{
 function MyChart({ chartData }:MyChartInterface) {
   return (
     <div className="chart-container">
-      <h2 style={{ textAlign: "center" }}>Line Chart</h2>
       <Line
         data = {chartData}
         options = {{
@@ -48,4 +47,5 @@ function MyChart({ chartData }:MyChartInterface) {
     </div>
   );
 }
+
 export default MyChart;

@@ -9,11 +9,11 @@ import { ChartDataInterface, DatasetInterface } from "./@types/data";
 import { scrapingInfoData } from "./@types/socket";
 
 const data:ChartDataInterface = {
-  labels: ["13:22:08", "13:25:08", "13:32:18"],
+  labels: [],
   datasets: [
     {
       label: "FullCount",
-      data: [55, 75, 96],
+      data: [],
       backgroundColor: [
         "red",       
       ],
@@ -22,7 +22,7 @@ const data:ChartDataInterface = {
     },
     {
       label: "HalfCount",
-      data: [5, 23, 50],
+      data: [],
       backgroundColor: [
         "blue"
       ],

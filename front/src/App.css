@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.App .chart-container{
+  margin:0 auto;
+  max-width:90%;
+  max-height:400px;
+}
