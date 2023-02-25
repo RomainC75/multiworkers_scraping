@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Pokemon = require("../models/pokemon.model");
 const createError = require("http-errors");
+const { sendSocketNotification } = require("../util/handleSocketNotification");
+const { getEveryPokemonEntriesCount } = require("../models/pokemon.model");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -45,11 +47,11 @@ router.post("/", async (req, res, next) => {
       insertedIds:   ans ,
     });
 
-    const fullCount = await Pokemon.getEveryPokemonEntriesCount();
-    global.io.emit("scrapingInfo", {
-      fullCount,
-      date: new Date()
-    });
+    const halfCount = await Pokemon.getPokemonHalfEntriesCount();
+    sendSocketNotification(global.io, null, halfCount)
+    console.log('_________________________________________')
+    console.log('====> HALF : ', halfCount)
+    console.log('_________________________________________')
     
   } catch (error) {
     console.log("error : ", error);
@@ -58,6 +60,7 @@ router.post("/", async (req, res, next) => {
 });
 
 router.get("/next", async (req, res, next) => {
+
   try {
     const firstPokemonFound = await Pokemon.getFirstWaitingPokemon();
     const everyPokemonCount = await Pokemon.getEveryPokemonEntriesCount();
@@ -69,14 +72,16 @@ router.get("/next", async (req, res, next) => {
       return res.status(400).json({ message: "no pokemon to analyse" });
     }
     // console.log('==> FIrst pokemon found : ', firstPokemonFound)
-    res.status(200).json({ pokemon: firstPokemonFound });
+    res.status(200).json({ pokemon: firstPokemonFound })
   } catch (error) {
     next(error);
   }
+
 });
 
 router.post("/next/:id", async (req, res, next) => {
   try {
+
     const id = req.params.id;
     const data = req.body;
     const pokemon = new Pokemon();
@@ -90,10 +95,22 @@ router.post("/next/:id", async (req, res, next) => {
         .status(422)
         .json({ message: "oups, something wrong in the request" });
     }
+    const fullCount = await Pokemon.getEveryPokemonEntriesCount()
+    sendSocketNotification(global.io, fullCount, null)
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    console.log('====> FULL : ', fullCount)
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    
     res.status(201).json({ message: "updated", preUpdatedPokemon });
+    
+    
+
   } catch (error) {
     next(error);
   }
+
+  
+  
 });
 
 router.get("/url", async (req, res, next) => {

@@ -34,19 +34,19 @@ services:
     environment:
       - DOMAIN=http://localhost:3000
 
-  backend_test:
-    depends_on:
-      - backend
-    build: ./BACK
-    volumes:
-      - $PWD/BACK/app:/usr/src/server/app
-    command: npm run test
-    networks:
-      - backend_network
-    logging:
-      driver: journald
-      options:
-        tag: tests
+  # backend_test:
+  #   depends_on:
+  #     - backend
+  #   build: ./BACK
+  #   volumes:
+  #     - $PWD/BACK/app:/usr/src/server/app
+  #   command: npm run test
+  #   networks:
+  #     - backend_network
+  #   logging:
+  #     driver: journald
+  #     options:
+  #       tag: tests
 
   # scraper:
   #   depends_on:

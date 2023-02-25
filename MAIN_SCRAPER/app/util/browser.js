@@ -13,7 +13,7 @@ module.exports= class Browser {
                 "--disable-setuid-sandbox",
                 "--no-sandbox",
             ],
-            slowMo:800,
+            slowMo:1100,
             headless:true,  
         })
         this.page = await this.browser.newPage()

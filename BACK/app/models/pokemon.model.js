@@ -106,7 +106,7 @@ module.exports =  class Pokemon{
     static async getEveryPokemonEntriesCount(){
         try{
             const [[res]] = await db.query(
-                "SELECT COUNT(*) FROM pokemon"
+                "SELECT SQL_NO_CACHE COUNT(*) FROM pokemon"
             )
             return res['COUNT(*)']
         }catch(error){
@@ -117,7 +117,7 @@ module.exports =  class Pokemon{
     static async getPokemonHalfEntriesCount(){
         try {
             const [[res]] = await db.query(
-                "SELECT COUNT(*) FROM pokemon WHERE `description` IS NULL"
+                "SELECT SQL_NO_CACHE COUNT(*) FROM pokemon WHERE `isAnalysed`=1"
             )
             return res['COUNT(*)']
         } catch (error) {

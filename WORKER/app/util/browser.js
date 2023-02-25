@@ -13,7 +13,7 @@ module.exports = class Browser {
           "--disable-setuid-sandbox",
           "--no-sandbox",
       ],
-      slowMo: 1000,
+      slowMo: 1300,
       headless:true,
       // headless: false,
     });

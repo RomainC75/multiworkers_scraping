@@ -13,12 +13,13 @@ export const updateChartData = (
   fullCount = !fullCount ? 0 : fullCount;
   halfCount = halfCount
     ? halfCount
-    : chartData.datasets[1].data[chartData.datasets[0].data.length - 1];
+    : chartData.datasets[1].data[chartData.datasets[1].data.length - 1];
   halfCount = !halfCount ? 0 : halfCount;
 
   if (chartData.labels.length >= 10) {
     chartData.labels.shift();
     chartData.datasets[0].data.shift();
+    chartData.datasets[1].data.shift();
   }
 
   chartData.labels.push(
