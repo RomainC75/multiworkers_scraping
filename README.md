@@ -1,29 +1,12 @@
-
-
-
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/RomainC75/multiworkers_scraping/raw/main/images/screen.png" alt="Logo" width="200" height="200">
   </a>
-
   <h3 align="center">Multiworkers-scraping</h3>
-
-
 </div>
 
-
-
-
-
-
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 With this project, I wanted to split a scraping script into micro-services. The target website was [this](https://scrapeme.live/shop/). 
 It about pokemon, gotta catch em all !!
@@ -81,7 +64,9 @@ There is nothing special about the interface, because it's supposed to run on a 
 ## Usage
 
 Go to the page http://localhost:3000 to watch the chart grow.
-
+<div align="center">
+<img src="https://github.com/RomainC75/multiworkers_scraping/raw/main/images/scrape-multi-workers-schema.png" alt="Logo" width="200" height="200">
+</div>
 
 <!-- CONTRIBUTING -->
 ## Something strange ? 
