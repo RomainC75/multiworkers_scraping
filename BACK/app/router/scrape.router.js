@@ -15,24 +15,32 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
+  console.log('====>POST /scrape : BODY', req.body)
   try {
-    // if (
-    //   !("name" in req.body) ||
-    //   !("url" in req.body || !("price" in req.body))
-    // ) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "need 3 keys : name, url ans price" });
-    // }
+    if(!req.body.every(pokemon=>{
+      if (
+        !("name" in pokemon) ||
+        !("url" in pokemon || !("price" in pokemon))
+      ){
+        return false
+      }
+      return true
+    })){
+      return res
+        .status(400)
+        .json({ message: "need 3 keys : name, url ans price" });
+    }
     
-    const ans = await Promise.all(
+    
+    
+    const ans = await Promise.allSettled(
       req.body.map( (pokemon) => {
         return new Promise(async(resolve,reject)=>{
           try {
             const { name, url, price } = pokemon;
             const ans = await Pokemon.saveUrl(name, url, price);
             if (!ans) {
-              resolve({error: name})
+              reject(name)
             }
             resolve(ans[0].insertId)
           } catch (error) {
@@ -41,17 +49,15 @@ router.post("/", async (req, res, next) => {
         })
       })
     );
-
+      
     res.status(201).json({
       message: "pokemon registered",
-      insertedIds:   ans ,
+      insertedIds:   ans.filter(obj=>obj.status==='fulfilled').map(pokemon=>pokemon.value),
+      errors: ans.filter(obj=>obj.status==="rejected").map(pokemon=>pokemon.reason)
     });
 
     const halfCount = await Pokemon.getPokemonHalfEntriesCount();
     sendSocketNotification(global.io, null, halfCount)
-    console.log('_________________________________________')
-    console.log('====> HALF : ', halfCount)
-    console.log('_________________________________________')
     
   } catch (error) {
     console.log("error : ", error);
@@ -95,16 +101,11 @@ router.post("/next/:id", async (req, res, next) => {
         .status(422)
         .json({ message: "oups, something wrong in the request" });
     }
-    const fullCount = await Pokemon.getEveryPokemonEntriesCount()
-    sendSocketNotification(global.io, fullCount, null)
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-    console.log('====> FULL : ', fullCount)
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     
     res.status(201).json({ message: "updated", preUpdatedPokemon });
     
-    
-
+    const fullCount = await Pokemon.getEveryPokemonEntriesCount()
+    sendSocketNotification(global.io, fullCount, null)
   } catch (error) {
     next(error);
   }

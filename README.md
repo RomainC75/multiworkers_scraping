@@ -75,7 +75,7 @@ Go to the page http://localhost:3000 to watch the chart grow.
 
 ## Something strange ?
 
-Clearly, MySQL is not the best option for this kind of use. The cache system of MySql hide a part of the real time informations, that's why the chart doesn't grow smoothly. So I think Redis would be a way better !
+Clearly, MySQL is not the best option for this kind of use. The cache system of MySql hide a part of the real time informations, that's why the chart doesn't grow smoothly. So I think Redis would be a better solution !
 
 ## Author
 

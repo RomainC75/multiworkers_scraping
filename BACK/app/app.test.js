@@ -11,8 +11,8 @@ const newPokemonScrapingInfos = {
   description: "Super description",
   stock: 123,
 };
-let analysingPokemonId = null;
 
+let analysingPokemonId = null;
 let idToDelete = null;
 
 describe("hello", () => {
@@ -25,7 +25,7 @@ describe("/scrape", () => {
   afterEach(async () => {
     if (
       expect.getState().currentTestName ===
-      "POST /scrape --> pokemon name already in DB"
+      "post /next/:id -> post result at a wrong id"
     ) {
       return request(app).delete(`/scrape/${newPokemon.name}`).expect(200);
     }
@@ -58,7 +58,7 @@ describe("/scrape", () => {
     delete newInvalidPokemon.name;
     return request(app)
       .post("/scrape")
-      .send(newInvalidPokemon)
+      .send([newInvalidPokemon])
       .expect(400)
       .then((response) => {
         expect(response.body).toEqual(
@@ -70,34 +70,53 @@ describe("/scrape", () => {
         );
       });
   });
+
   it("POST /scrape --> create new Pokemon", () => {
     return request(app)
       .post("/scrape")
-      .send(newPokemon)
+      .send([newPokemon])
       .expect(201)
       .then((response) => {
         expect(response.body).toEqual(
           expect.objectContaining({
             message: expect.stringContaining("pokemon registered"),
-            insertedId: expect.any(Number),
+            insertedIds: expect.arrayContaining([expect.any(Number)]),
+            errors: expect.arrayContaining([])
           })
         );
+        expect(response.body.errors).toHaveLength(0)
       });
   });
+
   it("POST /scrape --> pokemon name already in DB", () => {
-    return request(app).post("/scrape").send(newPokemon).expect(400);
+    return request(app)
+      .post("/scrape")
+      .send([newPokemon])
+      .expect(201)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            message: expect.stringContaining("pokemon registered"),
+            insertedIds: expect.arrayContaining([]),
+            errors: expect.arrayContaining([expect.any(String)])
+          })
+        );
+        expect(response.body.insertedIds).toHaveLength(0)
+        expect(response.body.errors).toHaveLength(1)
+      });
   });
 
   // NEXT
   it("GET /next --> get next pokemon AND modify the isWaiting value", async () => {
     const nextPokemonRaw = await request(app).get("/scrape/next");
     const { pokemon } = nextPokemonRaw.body;
+    
 
     const sameNamePokemonRaw = await request(app).get(
       `/scrape/name/${pokemon.name}`
     );
-    const sameNamePokemon = sameNamePokemonRaw.body;
 
+    const sameNamePokemon = sameNamePokemonRaw.body;
     expect(pokemon.name).toEqual(sameNamePokemon.name);
     expect(sameNamePokemon.isWaiting).toEqual(1);
     analysingPokemonId = sameNamePokemon.id;
@@ -114,15 +133,17 @@ describe("/scrape", () => {
         ...newPokemonScrapingInfos,
       });
     const response = nextPokemonRaw.body;
-      expect(response.message).toEqual('updated')
+    expect(response.message).toEqual("updated");
 
     const sameNamePokemonRaw = await request(app).get(
       `/scrape/name/${response.preUpdatedPokemon.name}`
     );
     const sameNamePokemon = sameNamePokemonRaw.body;
-    
-    expect(newPokemonScrapingInfos.description).toEqual(sameNamePokemon.description);
-    expect(newPokemonScrapingInfos.stock).toEqual(sameNamePokemon.stock)
+
+    expect(newPokemonScrapingInfos.description).toEqual(
+      sameNamePokemon.description
+    );
+    expect(newPokemonScrapingInfos.stock).toEqual(sameNamePokemon.stock);
     expect(sameNamePokemon.isAnalysed).toEqual(1);
   });
 
@@ -134,7 +155,9 @@ describe("/scrape", () => {
       })
       .expect(422)
       .then((response) => {
-        expect(response.body.message).toEqual('oups, something wrong in the request')
+        expect(response.body.message).toEqual(
+          "oups, something wrong in the request"
+        );
       });
   });
 });
